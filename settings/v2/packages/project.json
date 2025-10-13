@@ -1,0 +1,40 @@
+{
+  "__version__": "1.0.6",
+  "general": {
+    "designResolution": {
+      "height": 1280,
+      "width": 720,
+      "fitWidth": true,
+      "fitHeight": false
+    }
+  },
+  "physics": {
+    "collisionGroups": [
+      {
+        "index": 1,
+        "name": "PLAYER"
+      },
+      {
+        "index": 2,
+        "name": "OBSTACLE"
+      },
+      {
+        "index": 3,
+        "name": "SPINE"
+      }
+    ],
+    "collisionMatrix": {
+      "0": 0,
+      "1": 12,
+      "2": 2,
+      "3": 2
+    }
+  },
+  "layer": [
+    {
+      "name": "14_TAP_TO_START",
+      "value": 16384
+    }
+  ],
+  "custom_joint_texture_layouts": []
+}
