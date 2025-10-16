@@ -1,4 +1,4 @@
-import { _decorator, Camera, Component, director, Label, labelAssembler, Node, Slider } from 'cc';
+import { _decorator, Camera, Component, director, HeightField, Label, labelAssembler, Node, Slider } from 'cc';
 import { gp } from './GlobalProperties';
 import { LocalStorageItems } from '../Constants';
 import { TapToStart } from './TapToStart';
@@ -19,6 +19,8 @@ export class UIController extends Component {
     audioManager : AudioManager = null;
     @property(Node)
     yuanbaoUI : Node = null;
+    @property(Node)
+    heightUI : Node = null;
 
     protected onLoad(): void {
         this.audioManager = director.getScene().getComponentInChildren(AudioManager);
@@ -43,6 +45,8 @@ export class UIController extends Component {
         console.log(yuanbaoNum);
         gp.yuanbaoNum = yuanbaoNum;
         yuanbaoLabel.string = yuanbaoNum.toString();
+        this.heightUI = this.node.getChildByName('HeightUI');
+        this.hideHeightUI();
     }
 
     update(deltaTime: number) {
@@ -100,6 +104,21 @@ export class UIController extends Component {
     showYuanbaoNumChange(newYuanbaoNum : number) {
         const yuanbaoLabel = this.yuanbaoUI.getChildByName('YuanbaoNum').getComponent(Label);
         yuanbaoLabel.string = newYuanbaoNum.toString();
+    }
+
+    changeMaxHeight(height : number) {
+        const heightLabel = this.heightUI.getChildByName('MaxHeight').getComponent(Label);
+        heightLabel.string = height.toString();
+    }
+
+    showHeightUI() {
+        this.heightUI.active = true;
+        const heightLabel = this.heightUI.getChildByName('MaxHeight').getComponent(Label);
+        heightLabel.string = '0';
+    }
+
+    hideHeightUI() {
+        this.heightUI.active = false;
     }
 }
 

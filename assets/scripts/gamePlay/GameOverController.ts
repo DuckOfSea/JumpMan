@@ -45,6 +45,7 @@ export class GameOverController extends Component {
     showGameOver(maxHeight : number) {
         this.node.active = true;
         this.node.position = this.camera.node.position;
+        this.UINode.hideHeightUI();
         // this.node.setSiblingIndex(this.node.parent.children.length - 1);
 
         const scoreNumLabel = this.settleScoreNode.getChildByName('ScoreNumber')?.getComponent(Label);

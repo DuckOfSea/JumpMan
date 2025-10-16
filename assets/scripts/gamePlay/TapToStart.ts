@@ -1,12 +1,15 @@
-import { __private, _decorator, Component, director, EventTouch, Input, input, Node } from 'cc';
+import { __private, _decorator, Component, director, EventTouch, find, Input, input, Node } from 'cc';
 import { gp } from './GlobalProperties';
 import { HeroSelectButton } from './HeroSelectButton';
 import { HighestScoreButton } from './HighestScoreButton';
 import { HeroSelectController } from '../heroSelect/HeroSelectController';
+import { UIController } from './UIController';
 const { ccclass, property } = _decorator;
 
 @ccclass('TapToStart')
 export class TapToStart extends Component {
+
+    UINode : UIController = null;
 
     protected onLoad(): void {
         console.log('taptostart onload');
@@ -14,7 +17,7 @@ export class TapToStart extends Component {
     }
 
     start() {
-        
+        this.UINode = find('Canvas/UI-Node')!.getComponent(UIController);
         this.node.on(Node.EventType.TOUCH_START, this.touchStart, this, true);
     }
 
@@ -39,7 +42,8 @@ export class TapToStart extends Component {
         }
         gp.isGameStart = true;
         this.node.active = false;
-        console.log("taptostart")
+        console.log("taptostart");
+        this.UINode.showHeightUI();
         this.closeOtherButton();
     }
 

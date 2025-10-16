@@ -18,9 +18,11 @@ export class AudioManager extends Component {
     @property(AudioClip)
     bgm01 : AudioClip = null;
     @property(AudioClip)
-    sfx01 : AudioClip = null;
+    bgm_unlock : AudioClip = null;
     @property(AudioClip)
-    sfx02 : AudioClip = null;
+    sfx_select : AudioClip = null;
+    @property(AudioClip)
+    sfx_tan : AudioClip = null;
     @property(AudioClip)
     sfx_refuse : AudioClip = null;
 
@@ -67,6 +69,9 @@ export class AudioManager extends Component {
             case 1:
                 this.musicSource.clip = this.bgm01;
                 break;
+            case 2:
+                this.musicSource.clip = this.bgm_unlock;
+                break;
             default:
                 this.musicSource.clip = this.bgm01;
                 break;
@@ -81,10 +86,10 @@ export class AudioManager extends Component {
         this.effectSourcePoolIndex = (this.effectSourcePoolIndex + 1) % 5;
         switch(idx) {
             case 1:
-                effectSource.clip = this.sfx01;
+                effectSource.clip = this.sfx_select;
                 break;
             case 2:
-                effectSource.clip = this.sfx02;
+                effectSource.clip = this.sfx_tan;
                 break;
             case 3:
                 effectSource.clip = this.sfx_refuse;
@@ -99,6 +104,10 @@ export class AudioManager extends Component {
 
     isplayingBGM() {
         return this.musicSource.playing;
+    }
+
+    stopBGM() {
+        this.musicSource.stop();
     }
 
     protected onDestroy(): void {

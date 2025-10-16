@@ -3,6 +3,7 @@ import { GameOverController } from './GameOverController';
 import { gp } from './GlobalProperties';
 import { AudioManager} from '../AudioManager';
 import { GroupNum } from '../Constants';
+import { UIController } from './UIController';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerController')
@@ -12,6 +13,7 @@ export class PlayerController extends Component {
     rigidBody : RigidBody2D = null;
     collider : Collider2D = null;
     GameOverUI : GameOverController = null;
+    UINode : UIController = null;
     @property(AudioManager)
     audioManager : AudioManager = null;
     lastPosition : Vec3 = null;
@@ -31,6 +33,7 @@ export class PlayerController extends Component {
         this.collider = this.node.getComponent(Collider2D);
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
         this.GameOverUI = find('Canvas/GameOverUI')!.getComponent(GameOverController);
+        this.UINode = find('Canvas/UI-Node')!.getComponent(UIController);
         
         this.lastPosition = new Vec3(0, 0, 0);
         this.lastLinearVelocity = new Vec2(0, 0);
@@ -57,7 +60,8 @@ export class PlayerController extends Component {
         this.bounceTimer += dt;
         this.jumpTimer += dt;
         if (this.node.position.y > this.maxHeight) {
-            this.maxHeight = this.node.position.y;
+            this.maxHeight = Math.floor(this.node.position.y);
+            this.UINode.changeMaxHeight(this.maxHeight);
         }
     }
 

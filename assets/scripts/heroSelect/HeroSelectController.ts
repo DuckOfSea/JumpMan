@@ -33,13 +33,14 @@ export class HeroSelectController extends Component {
         if (savedItemUnlockData) {
             this.itemUnlockData = JSON.parse(savedItemUnlockData);
         }
+        this.audioManager.stopBGM();
         
-
+        //测试用，正式发布改回来
+        this.itemUnlockData = [1, 0, 0, 0, 0];
         this.init();
     }
 
     protected onDestroy(): void {
-        this.itemUnlockData = [1, 0, 0, 0, 0];
         localStorage.setItem(LocalStorageItems.ITEM_UNLOCK_DATA, JSON.stringify(this.itemUnlockData));
     }
 
@@ -75,6 +76,7 @@ export class HeroSelectController extends Component {
             this.audioManager.playSFX(3, 1.0);
             return;
         }
+        //测试用，正式发布改回来，修改金钱-1
         this.UINode.changeYuanbaoNum(-1);
         this.itemUnlockData[unlockIndex] = 1;
         this.centerSelectedItem(unlockIndex);
@@ -128,6 +130,7 @@ export class HeroSelectController extends Component {
         this.currentSelectedItem = targetItem;
         border.active = true;
         arrow.active = true;
+        this.audioManager.playSFX(1, 1.0)
         
         this.currentSelectedIndex = index;
         localStorage.setItem(LocalStorageItems.CURRENT_HERO_INDEX, index.toString());
@@ -145,6 +148,7 @@ export class HeroSelectController extends Component {
 
     showUnlockItemAnimation(unlockIndex : number) {
         this.showUnlockItem.active = true;
+        this.audioManager.playBGM(2);
         const unlockItemAnim = this.showUnlockItem.getChildByName('UnlockItemAnim');
         unlockItemAnim.removeAllChildren();
         let newitem = instantiate(this.itemsPrefab[unlockIndex]);
@@ -157,6 +161,7 @@ export class HeroSelectController extends Component {
     touchUnlockAnimation(event : EventTouch) {
         const targetItem = event.target as Node;
         targetItem.active = false;
+        this.audioManager.stopBGM();
     }
 }
 
