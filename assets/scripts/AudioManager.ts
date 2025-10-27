@@ -16,15 +16,19 @@ export class AudioManager extends Component {
     private effectSourcePoolIndex : number = 0;
 
     @property(AudioClip)
-    bgm01 : AudioClip = null;
+    bgm_game01 : AudioClip = null;
     @property(AudioClip)
     bgm_unlock : AudioClip = null;
+    @property(AudioClip)
+    bgm_ignore : AudioClip = null;
     @property(AudioClip)
     sfx_select : AudioClip = null;
     @property(AudioClip)
     sfx_tan : AudioClip = null;
     @property(AudioClip)
     sfx_refuse : AudioClip = null;
+    @property(AudioClip)
+    sfx_coin : AudioClip = null;
 
 
     start() {
@@ -67,21 +71,25 @@ export class AudioManager extends Component {
         this.musicSource.stop();
         switch(idx) {
             case 1:
-                this.musicSource.clip = this.bgm01;
+                this.musicSource.clip = this.bgm_game01;
                 break;
             case 2:
                 this.musicSource.clip = this.bgm_unlock;
                 break;
+            case 3:
+                this.musicSource.clip = this.bgm_ignore;
+                break;
             default:
-                this.musicSource.clip = this.bgm01;
+                this.musicSource.clip = this.bgm_game01;
                 break;
         }
         this.musicSource.loop = true;
-        this.musicSource.volume = this.musicVolume;
+        this.musicSource.volume = this.musicVolume * 0.5;
+        console.log("music     " + idx + this.musicSource.volume)
         this.musicSource.play();
     }
 
-    playSFX(idx : number, volume : number) {
+    playSFX(idx : number) {
         const effectSource = this.effectSourcePool[this.effectSourcePoolIndex];
         this.effectSourcePoolIndex = (this.effectSourcePoolIndex + 1) % 5;
         switch(idx) {
@@ -94,16 +102,19 @@ export class AudioManager extends Component {
             case 3:
                 effectSource.clip = this.sfx_refuse;
                 break;
+            case 4:
+                effectSource.clip = this.sfx_coin;
+                break;
             default:
                 break;
         }
-        effectSource.volume = volume * this.effectVolume;
+        effectSource.volume = this.effectVolume;
         effectSource.play();
         
     }
 
-    isplayingBGM() {
-        return this.musicSource.playing;
+    isplayingBGM01() {
+        return this.musicSource.clip == this.bgm_game01;
     }
 
     stopBGM() {
@@ -115,7 +126,7 @@ export class AudioManager extends Component {
 
     updateMusicVolume(value : number) {
         this.musicVolume = value;
-        this.musicSource.volume = value;
+        this.musicSource.volume = value * 0.5;
     }
 
     updateEffectVolume(value : number) {

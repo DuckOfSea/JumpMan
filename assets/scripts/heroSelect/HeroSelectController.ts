@@ -53,7 +53,7 @@ export class HeroSelectController extends Component {
         if (gp.yuanbaoNum < 100) {
             const unlockRandomButton = this.node.getComponentInChildren(UnlockRandomButton);
             unlockRandomButton.playRefuseAnimation();
-            this.audioManager.playSFX(3, 1.0);
+            this.audioManager.playSFX(3);
             return;
         }
         const len = this.itemUnlockData.length;
@@ -73,7 +73,7 @@ export class HeroSelectController extends Component {
             console.log("皮肤解锁完了0.0")
             const unlockRandomButton = this.node.getComponentInChildren(UnlockRandomButton);
             unlockRandomButton.playRefuseAnimation();
-            this.audioManager.playSFX(3, 1.0);
+            this.audioManager.playSFX(3);
             return;
         }
         //测试用，正式发布改回来，修改金钱-1
@@ -130,7 +130,7 @@ export class HeroSelectController extends Component {
         this.currentSelectedItem = targetItem;
         border.active = true;
         arrow.active = true;
-        this.audioManager.playSFX(1, 1.0)
+        this.audioManager.playSFX(1)
         
         this.currentSelectedIndex = index;
         localStorage.setItem(LocalStorageItems.CURRENT_HERO_INDEX, index.toString());
@@ -143,7 +143,6 @@ export class HeroSelectController extends Component {
         const scrollX = targetX - (viewWidth / 2);
         console.log(scrollX + "  " + targetX )
         this.scrollView.scrollToOffset(new Vec2(scrollX, 0), 0.2, true)
-        //this.scrollView.scrollToOffset(new Vec2(100, 0), 0, true)
     }
 
     showUnlockItemAnimation(unlockIndex : number) {
@@ -155,13 +154,23 @@ export class HeroSelectController extends Component {
         newitem.parent = unlockItemAnim;
         const anim = unlockItemAnim.getComponent(Animation)
         anim.play('show_unlockitem_animation');
-        this.showUnlockItem.on(Node.EventType.TOUCH_START, this.touchUnlockAnimation, this)
+        this.showUnlockItem.off(Node.EventType.TOUCH_START, this.touchUnlockAnimation, this)
+        this.showUnlockItem.on(Node.EventType.TOUCH_START, () => {}, this)
+        setTimeout(() => {
+            this.showUnlockItem.on(Node.EventType.TOUCH_START, this.touchUnlockAnimation, this)
+            this.showUnlockItem.off(Node.EventType.TOUCH_START, this.doNothing, this)
+        }, 3000);
+        
     }
 
     touchUnlockAnimation(event : EventTouch) {
         const targetItem = event.target as Node;
         targetItem.active = false;
         this.audioManager.stopBGM();
+    }
+
+    doNothing(event : EventTouch) {
+
     }
 }
 

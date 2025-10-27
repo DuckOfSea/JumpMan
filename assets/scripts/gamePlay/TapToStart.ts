@@ -4,6 +4,7 @@ import { HeroSelectButton } from './HeroSelectButton';
 import { HighestScoreButton } from './HighestScoreButton';
 import { HeroSelectController } from '../heroSelect/HeroSelectController';
 import { UIController } from './UIController';
+import { GameStatus } from '../Constants';
 const { ccclass, property } = _decorator;
 
 @ccclass('TapToStart')
@@ -37,10 +38,11 @@ export class TapToStart extends Component {
     }
 
     touchStart(event : EventTouch) { 
-        if (gp.settingPause) {
+        console.log("touch taptostart")
+        if (gp.gameStatus != GameStatus.WAIT_TO_START) {
             return;
         }
-        gp.isGameStart = true;
+        gp.gameStatus = GameStatus.GAMING;
         this.node.active = false;
         console.log("taptostart");
         this.UINode.showHeightUI();

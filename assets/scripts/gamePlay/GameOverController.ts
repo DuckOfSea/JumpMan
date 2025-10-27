@@ -39,7 +39,7 @@ export class GameOverController extends Component {
     }
     
     protected start(): void {
-        this.node.active = false;
+
     }
 
     showGameOver(maxHeight : number) {
@@ -53,12 +53,11 @@ export class GameOverController extends Component {
         //updateScore
         this.highestScoreNode.updateScore(maxHeight);
         //updateYuanbao
-        this.needChangeYuanbaoNum = Math.floor(maxHeight / 1000) > 0 ? Math.floor(maxHeight / 1000) : 0;
+        this.needChangeYuanbaoNum = Math.floor(maxHeight / 2000)// > 0 ? Math.floor(maxHeight / 2000) : 0;
         const yuanbaoLabel = this.getYuanbaoNode.getChildByName('YuanbaoNum').getComponent(Label);
         yuanbaoLabel.string = this.needChangeYuanbaoNum.toString();
         this.UINode.changeYuanbaoNum(this.needChangeYuanbaoNum);
 
-        console.log('game over    ' +  this.node.active);
         if (this.background) {
             this.background.color = new Color(0, 0, 0, 200);
         }
@@ -78,8 +77,6 @@ export class GameOverController extends Component {
         this.hideGameOver();
         director.resume();
         director.loadScene('gamePlay');
-        
-        
     }
 
 }

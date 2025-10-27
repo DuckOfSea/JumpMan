@@ -1,5 +1,5 @@
 import { _decorator, Component, Label, Node } from 'cc';
-import { LocalStorageItems } from '../Constants';
+import { GameStatus, LocalStorageItems } from '../Constants';
 import { gp } from './GlobalProperties';
 const { ccclass, property } = _decorator;
 
@@ -56,7 +56,7 @@ export class HighestScoreButton extends Component {
     }
 
     showScoreBoard() {
-        if (gp.settingPause) {
+        if (gp.gameStatus == GameStatus.SETTING_PAUSE) {
             return;
         }
         let score01 = localStorage.getItem(LocalStorageItems.SCORE_01) ? 
@@ -73,11 +73,11 @@ export class HighestScoreButton extends Component {
         scoreNode03.getChildByName('ScoreNumber').getComponent(Label).string = score03;
         this.scoreBoard.active = true;
         console.log("showScoreBoard" + this.scoreBoard.active)
-        gp.settingPause = true;
+        gp.gameStatus = GameStatus.SETTING_PAUSE;
     }
 
     returnButtonClick() {
-        gp.settingPause = false;
+        gp.gameStatus = GameStatus.WAIT_TO_START;
         this.scoreBoard.active = false;
     }
 }

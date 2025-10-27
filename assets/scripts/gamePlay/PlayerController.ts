@@ -2,7 +2,7 @@ import { _decorator, clamp, Collider, Collider2D, Component, Contact2DType, dire
 import { GameOverController } from './GameOverController';
 import { gp } from './GlobalProperties';
 import { AudioManager} from '../AudioManager';
-import { GroupNum } from '../Constants';
+import { GameStatus, GroupNum } from '../Constants';
 import { UIController } from './UIController';
 const { ccclass, property } = _decorator;
 
@@ -12,17 +12,19 @@ export class PlayerController extends Component {
  
     rigidBody : RigidBody2D = null;
     collider : Collider2D = null;
+    @property(GameOverController)
     GameOverUI : GameOverController = null;
     UINode : UIController = null;
     @property(AudioManager)
     audioManager : AudioManager = null;
-    lastPosition : Vec3 = null;
-    lastLinearVelocity : Vec2 = null;
     isDead : boolean = false;
+    surroundingBall : Node = null;
+    isIgnore : boolean = false;
 
     bounceTimer : number = 0;
-    jumpTimer : number = 0;
     maxHeight : number = 0;
+    ignoreTimer : number = 0;
+
 
     protected onLoad(): void {
         this.audioManager = director.getScene().getComponentInChildren(AudioManager);
@@ -34,13 +36,13 @@ export class PlayerController extends Component {
         this.collider.on(Contact2DType.BEGIN_CONTACT, this.onBeginContact, this);
         this.GameOverUI = find('Canvas/GameOverUI')!.getComponent(GameOverController);
         this.UINode = find('Canvas/UI-Node')!.getComponent(UIController);
+        this.surroundingBall = this.node.getChildByName('surroundingBall');
+        this.surroundingBall.active = false;
         
-        this.lastPosition = new Vec3(0, 0, 0);
-        this.lastLinearVelocity = new Vec2(0, 0);
     }
 
     protected update(dt: number): void {
-        if (!gp.isGameStart || gp.settingPause) {
+        if (gp.gameStatus != GameStatus.GAMING) {
             this.rigidBody.type = ERigidBody2DType.Static;
             return;
         }
@@ -58,7 +60,16 @@ export class PlayerController extends Component {
             }
         }
         this.bounceTimer += dt;
-        this.jumpTimer += dt;
+        if (this.isIgnore) {
+            this.ignoreTimer += dt;
+            if (this.ignoreTimer > 5) {
+                this.rigidBody.group = GroupNum.PLAYER;
+                this.collider.group = GroupNum.PLAYER;
+                this.surroundingBall.active = false;
+                this.audioManager.playBGM(1)
+                this.isIgnore = false;
+            }
+        }
         if (this.node.position.y > this.maxHeight) {
             this.maxHeight = Math.floor(this.node.position.y);
             this.UINode.changeMaxHeight(this.maxHeight);
@@ -67,28 +78,39 @@ export class PlayerController extends Component {
 
     jump(dir : number) {
         //console.log("jump")
-        this.rigidBody.linearVelocity = new Vec2(this.rigidBody.linearVelocity.x + 5 * dir, this.rigidBody.linearVelocity.y + 10);
-        if (this.jumpTimer > 0.2) {
-            //this.audioManager.playSFX(1, 0.5)
-            this.jumpTimer = 0;
-        }
+        this.rigidBody.linearVelocity = new Vec2(this.rigidBody.linearVelocity.x + 5 * dir, 
+            this.rigidBody.linearVelocity.y + 10);
         
     } 
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact) {
         if (otherCollider.group == GroupNum.SPINE) {
-            if (!this.isDead) {
+            if (gp.gameStatus == GameStatus.GAMING) {
                 this.onPlayerDie();
             }
         } else if (otherCollider.group == GroupNum.OBSTACLE) {
             const worldManifold = contact.getWorldManifold()
             this.bounce()
+        } else if (otherCollider.group == GroupNum.ITEM) {
+            if (otherCollider.node.name == "item01-ignore") {
+                otherCollider.node.destroy();
+                this.rigidBody.group = GroupNum.DEFAULT;
+                this.collider.group = GroupNum.DEFAULT;
+                this.surroundingBall.active = true;
+                this.isIgnore = true;
+                this.ignoreTimer = 0;
+                this.audioManager.playBGM(3);
+            } else if (otherCollider.node.name == "item02-yuanbao") {
+                otherCollider.node.destroy();
+                this.UINode.changeYuanbaoNum(1);
+                this.audioManager.playSFX(4);
+            }
         }
     }
 
     onPlayerDie() {
         this.isDead = true;
-        director.pause();
+        gp.gameStatus = GameStatus.GAME_OVER;
         this.GameOverUI.showGameOver(Math.floor(this.maxHeight));
     }
 
@@ -98,7 +120,7 @@ export class PlayerController extends Component {
             this.bounceTimer = 0; // 设置为正在弹跳状态
             return;
         }
-        this.audioManager.playSFX(2, 1);
+        this.audioManager.playSFX(2);
         this.bounceTimer = 0; // 设置为正在弹跳状态
         const ball = this.node; // 获取当前节点（小球）
 

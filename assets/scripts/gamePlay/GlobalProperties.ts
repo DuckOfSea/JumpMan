@@ -7,8 +7,7 @@ export class GlobalProperties extends Component {
 
     width : number = 0;
     height : number = 0;
-    public settingPause : boolean = false;
-    public isGameStart : boolean = false;
+    public gameStatus : number = 0;
     public score : number = 0;
     public yuanbaoNum : number = 0;
 

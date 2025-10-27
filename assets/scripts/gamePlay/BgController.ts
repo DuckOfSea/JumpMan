@@ -1,6 +1,6 @@
 import { _decorator, Component, instantiate, Node, Prefab, UITransform } from 'cc';
 import { PlayerController } from './PlayerController';
-import { G_VIEW_SIZE } from './game';
+import { G_VIEW_SIZE } from '../Constants';
 const { ccclass, property } = _decorator;
 
 

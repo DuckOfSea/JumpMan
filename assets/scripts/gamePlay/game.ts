@@ -1,11 +1,9 @@
 import { _decorator, Component, director, EventTouch, Input, input, instantiate, Node, NodeEventType, Prefab, ResolutionPolicy, RigidBody2D, screen, Size, size, Vec2, View, view } from 'cc';
 import { gp } from './GlobalProperties';
 import { PlayerController } from './PlayerController';
-import { LocalStorageItems } from '../Constants';
+import { GameStatus, LocalStorageItems } from '../Constants';
 import { AudioManager } from '../AudioManager';
 const { ccclass, property } = _decorator;
-
-export const G_VIEW_SIZE = new Size(720, 1280);
 
 @ccclass('game')
 export class game extends Component {
@@ -53,13 +51,13 @@ export class game extends Component {
     }
 
     init() {
-        gp.isGameStart = false;
+        gp.gameStatus = GameStatus.WAIT_TO_START;
         this.playerParent = this.node.getChildByName('Players');
         this.fireParent = this.node.getChildByName('Fires');
         this.playerInit();
         this.fireInit();
         this.initUI();
-        if (!this.audioManager.isplayingBGM()) {
+        if (!this.audioManager.isplayingBGM01()) {
             this.audioManager.playBGM(1); 
         }
         
@@ -83,8 +81,6 @@ export class game extends Component {
     initUI() {
         const tapToStartUI = this.node.getChildByName('TapToStartUI');
         tapToStartUI.active = true;
-        const gameOverUI = this.node.getChildByName('GameOverUI');
-        gameOverUI.active = false;
     }
 
 }

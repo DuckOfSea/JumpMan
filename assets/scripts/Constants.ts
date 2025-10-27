@@ -1,3 +1,5 @@
+import { Size } from "cc";
+
 export enum LocalStorageItems {
     CURRENT_HERO_INDEX ='currentHeroIndex',
     MUSIC_VOLUME = 'musicVolume',
@@ -13,7 +15,15 @@ export enum GroupNum {
     DEFAULT = 1,
     PLAYER = 2,
     OBSTACLE = 4,
-    SPINE = 8
+    SPINE = 8,
+    ITEM = 16,
 }
 
+export const G_VIEW_SIZE = new Size(720, 1280);
 
+export enum GameStatus {
+    WAIT_TO_START = 1,
+    SETTING_PAUSE = 2,
+    GAMING = 3,
+    GAME_OVER = 4,
+}
