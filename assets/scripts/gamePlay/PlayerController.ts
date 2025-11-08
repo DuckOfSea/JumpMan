@@ -85,23 +85,29 @@ export class PlayerController extends Component {
 
     onBeginContact(selfCollider: Collider2D, otherCollider: Collider2D, contact: IPhysics2DContact) {
         if (otherCollider.group == GroupNum.SPINE) {
-            if (gp.gameStatus == GameStatus.GAMING) {
+            if (gp.gameStatus == GameStatus.GAMING && !this.isDead) {
                 this.onPlayerDie();
             }
         } else if (otherCollider.group == GroupNum.OBSTACLE) {
             const worldManifold = contact.getWorldManifold()
             this.bounce()
         } else if (otherCollider.group == GroupNum.ITEM) {
-            if (otherCollider.node.name == "item01-ignore") {
-                otherCollider.node.destroy();
+            if (otherCollider.node.name.startsWith("item01-ignore")) {
+                setTimeout(() => {
+                    otherCollider.node.active = false;
+                }, 100);
+                otherCollider.enabled = false;
                 this.rigidBody.group = GroupNum.DEFAULT;
                 this.collider.group = GroupNum.DEFAULT;
                 this.surroundingBall.active = true;
                 this.isIgnore = true;
                 this.ignoreTimer = 0;
                 this.audioManager.playBGM(3);
-            } else if (otherCollider.node.name == "item02-yuanbao") {
-                otherCollider.node.destroy();
+            } else if (otherCollider.node.name.startsWith("item02-yuanbao")) {
+                setTimeout(() => {
+                    otherCollider.node.active = false;
+                }, 100);
+                otherCollider.enabled = false;
                 this.UINode.changeYuanbaoNum(1);
                 this.audioManager.playSFX(4);
             }

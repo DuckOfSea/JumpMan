@@ -1,4 +1,4 @@
-import { _decorator, Component, Label, Node } from 'cc';
+import { _decorator, Animation, Component, Label, Node } from 'cc';
 import { GameStatus, LocalStorageItems } from '../Constants';
 import { gp } from './GlobalProperties';
 const { ccclass, property } = _decorator;
@@ -13,6 +13,9 @@ export class HighestScoreButton extends Component {
     @property(Node)
     scoreNode03 : Node = null;
     scoreBoard : Node = null;
+
+    @property(Animation)
+    anim : Animation = null;
     
     start() {
         this.scoreBoard = this.node.getChildByName('ScoreBoard');
@@ -21,6 +24,12 @@ export class HighestScoreButton extends Component {
         this.scoreNode03 = this.scoreBoard.getChildByName('Score03');
         this.scoreBoard.active = false;
         this.node.on(Node.EventType.TOUCH_START, this.showScoreBoard, this);
+
+        this.anim = this.node.getComponent(Animation);
+        this.anim.play("button_entrance_right");
+        setTimeout(() => {
+            this.anim.play("button_idle");
+        }, 1000);
     }
 
     protected onDestroy(): void {
@@ -56,7 +65,7 @@ export class HighestScoreButton extends Component {
     }
 
     showScoreBoard() {
-        if (gp.gameStatus == GameStatus.SETTING_PAUSE) {
+        if (gp.gameStatus != GameStatus.WAIT_TO_START) {
             return;
         }
         let score01 = localStorage.getItem(LocalStorageItems.SCORE_01) ? 
@@ -73,7 +82,7 @@ export class HighestScoreButton extends Component {
         scoreNode03.getChildByName('ScoreNumber').getComponent(Label).string = score03;
         this.scoreBoard.active = true;
         console.log("showScoreBoard" + this.scoreBoard.active)
-        gp.gameStatus = GameStatus.SETTING_PAUSE;
+        gp.gameStatus = GameStatus.SHOWING_SCOREBOARD;
     }
 
     returnButtonClick() {

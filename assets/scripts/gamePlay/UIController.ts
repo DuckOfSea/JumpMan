@@ -3,6 +3,7 @@ import { gp } from './GlobalProperties';
 import { GameStatus, LocalStorageItems } from '../Constants';
 import { TapToStart } from './TapToStart';
 import { AudioManager } from '../AudioManager';
+import { GameOverController } from './GameOverController';
 const { ccclass, property } = _decorator;
 
 @ccclass('UIControoler')
@@ -90,8 +91,11 @@ export class UIController extends Component {
     clickSettingOkButton() {
         this.settingUI.active = false;
         const tapToStartUI = this.node.getParent().getComponentInChildren(TapToStart);
-        if (tapToStartUI == null || tapToStartUI.node.active) {
+        const GameOverUI = this.node.getParent().getComponentInChildren(GameOverController);
+        if (tapToStartUI == null || tapToStartUI.node.active) {//在皮肤选择界面也是wait状态
             gp.gameStatus = GameStatus.WAIT_TO_START;
+        } else if (GameOverUI.node.active){
+            gp.gameStatus = GameStatus.GAME_OVER;
         } else {
             gp.gameStatus = GameStatus.GAMING;
         }

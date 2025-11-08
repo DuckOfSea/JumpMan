@@ -118,6 +118,7 @@ export class AudioManager extends Component {
     }
 
     stopBGM() {
+        console.log("stop bgm")
         this.musicSource.stop();
     }
 

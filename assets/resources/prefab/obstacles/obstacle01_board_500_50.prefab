@@ -1,7 +1,7 @@
 [
   {
     "__type__": "cc.Prefab",
-    "_name": "obstacle01",
+    "_name": "obstacle01_board_500_50",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_native": "",
@@ -13,7 +13,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "obstacle01",
+    "_name": "obstacle01_board_500_50",
     "_objFlags": 0,
     "__editorExtras__": {},
     "_parent": null,
@@ -32,13 +32,10 @@
       },
       {
         "__id__": 12
-      },
-      {
-        "__id__": 14
       }
     ],
     "_prefab": {
-      "__id__": 16
+      "__id__": 14
     },
     "_lpos": {
       "__type__": "cc.Vec3",
@@ -300,27 +297,6 @@
   {
     "__type__": "cc.CompPrefabInfo",
     "fileId": "97hcYmoWNMMry3Szf4ZH75"
-  },
-  {
-    "__type__": "bb94ceCQ0lP0K+tB2jSBEs3",
-    "_name": "",
-    "_objFlags": 0,
-    "__editorExtras__": {},
-    "node": {
-      "__id__": 1
-    },
-    "_enabled": true,
-    "__prefab": {
-      "__id__": 15
-    },
-    "upperBoundary": 0,
-    "lowerBoundary": 0,
-    "height": 0,
-    "_id": ""
-  },
-  {
-    "__type__": "cc.CompPrefabInfo",
-    "fileId": "f6FMxjtjBG0J1yGs2FB//y"
   },
   {
     "__type__": "cc.PrefabInfo",

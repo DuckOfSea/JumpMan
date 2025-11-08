@@ -18,7 +18,7 @@ export class HeroSelectController extends Component {
     @property(AudioManager)
     audioManager : AudioManager = null;
     @property([Prefab])
-    itemsPrefab : Prefab[] = [];
+    herosPrefab : Prefab[] = [];
 
     start() {
         this.currentSelectedIndex = Number((localStorage.getItem(LocalStorageItems.CURRENT_HERO_INDEX) 
@@ -33,7 +33,6 @@ export class HeroSelectController extends Component {
         if (savedItemUnlockData) {
             this.itemUnlockData = JSON.parse(savedItemUnlockData);
         }
-        this.audioManager.stopBGM();
         
         //测试用，正式发布改回来
         this.itemUnlockData = [1, 0, 0, 0, 0];
@@ -150,8 +149,8 @@ export class HeroSelectController extends Component {
         this.audioManager.playBGM(2);
         const unlockItemAnim = this.showUnlockItem.getChildByName('UnlockItemAnim');
         unlockItemAnim.removeAllChildren();
-        let newitem = instantiate(this.itemsPrefab[unlockIndex]);
-        newitem.parent = unlockItemAnim;
+        let newHero = instantiate(this.herosPrefab[unlockIndex]);
+        newHero.parent = unlockItemAnim;
         const anim = unlockItemAnim.getComponent(Animation)
         anim.play('show_unlockitem_animation');
         this.showUnlockItem.off(Node.EventType.TOUCH_START, this.touchUnlockAnimation, this)
@@ -166,7 +165,7 @@ export class HeroSelectController extends Component {
     touchUnlockAnimation(event : EventTouch) {
         const targetItem = event.target as Node;
         targetItem.active = false;
-        this.audioManager.stopBGM();
+        this.audioManager.playBGM(1);
     }
 
     doNothing(event : EventTouch) {

@@ -26,4 +26,23 @@ export enum GameStatus {
     SETTING_PAUSE = 2,
     GAMING = 3,
     GAME_OVER = 4,
+    SHOWING_SCOREBOARD = 5,
+}
+
+export const ElementData = {
+    element01: {
+        left : -360,
+        right : 360,
+        height : 50,
+    },
+    element02: {
+        left : -360,
+        right : 360,
+        height : 500,
+    },
+    element03: {
+        left : -360,
+        right : 360,
+        height : 600,
+    },
 }

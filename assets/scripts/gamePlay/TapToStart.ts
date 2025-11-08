@@ -38,7 +38,6 @@ export class TapToStart extends Component {
     }
 
     touchStart(event : EventTouch) { 
-        console.log("touch taptostart")
         if (gp.gameStatus != GameStatus.WAIT_TO_START) {
             return;
         }
