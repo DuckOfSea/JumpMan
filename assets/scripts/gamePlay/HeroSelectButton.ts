@@ -14,7 +14,9 @@ export class HeroSelectButton extends Component {
         this.anim = this.node.getComponent(Animation);
         this.anim.play('button_entrance');
         setTimeout(() => {
-            this.anim.play('button_idle');
+            if (this.anim) {
+                this.anim.play('button_idle');
+            }
         }, 1000);
     }
 

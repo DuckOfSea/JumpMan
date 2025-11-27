@@ -85,7 +85,6 @@ export class AudioManager extends Component {
         }
         this.musicSource.loop = true;
         this.musicSource.volume = this.musicVolume * 0.5;
-        console.log("music     " + idx + this.musicSource.volume)
         this.musicSource.play();
     }
 

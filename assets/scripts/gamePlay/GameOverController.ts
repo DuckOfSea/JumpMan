@@ -1,7 +1,5 @@
 import { __private, _decorator, Camera, Color, color, Component, director, EventTouch, Input, input, Label, Node, Sprite, tween, v3 } from 'cc';
-import { LocalStorageItems } from '../Constants';
 import { HighestScoreButton} from './HighestScoreButton';
-import { TapToStart } from './TapToStart';
 import { UIController } from './UIController';
 const { ccclass, property } = _decorator;
 
@@ -39,6 +37,10 @@ export class GameOverController extends Component {
     }
     
     protected start(): void {
+
+    }
+
+    protected onDestroy(): void {
 
     }
 

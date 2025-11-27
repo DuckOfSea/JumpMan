@@ -34,8 +34,9 @@ export class HeroSelectController extends Component {
             this.itemUnlockData = JSON.parse(savedItemUnlockData);
         }
         
-        //测试用，正式发布改回来
-        this.itemUnlockData = [1, 0, 0, 0, 0];
+        //todo测试用，正式发布改回来
+        this.itemUnlockData = [1, 0, 0, 0, 0, 
+                                0, 0, 0, 0, 0];
         this.init();
     }
 
@@ -75,8 +76,7 @@ export class HeroSelectController extends Component {
             this.audioManager.playSFX(3);
             return;
         }
-        //测试用，正式发布改回来，修改金钱-1
-        this.UINode.changeYuanbaoNum(-1);
+        this.UINode.changeYuanbaoNum(-200);
         this.itemUnlockData[unlockIndex] = 1;
         this.centerSelectedItem(unlockIndex);
         this.showUnlockItemAnimation(unlockIndex);

@@ -9,6 +9,7 @@ export enum LocalStorageItems {
     SCORE_03 = 'Score03',
     YUANBAO_NUM = 'yuanbaoNum',
     ITEM_UNLOCK_DATA = 'itemUnlockData',
+    NEED_GAME_PLAY_TUTORIAL = 'needGamePlayTutorial',
 }
 
 export enum GroupNum {
@@ -27,22 +28,75 @@ export enum GameStatus {
     GAMING = 3,
     GAME_OVER = 4,
     SHOWING_SCOREBOARD = 5,
+    TUTORIAL = 6,
 }
 
 export const ElementData = {
     element01: {
-        left : -360,
-        right : 360,
-        height : 50,
+        e01: {
+            left : -360,
+            right : 360,
+            height : 50,
+        },
+        e02: {
+            left : -360,
+            right : 360,
+            height : 50,
+        },
+        e03: {
+            left : -360,
+            right : 360,
+            height : 300,
+        },
+        e04: {
+            left : -360,
+            right : 360,
+            height : 500,
+        },
+        e05: {
+            left : -360,
+            right : 360,
+            height : 500,
+        },
+        e06: {
+            left : -360,
+            right : 360,
+            height : 50,
+        },
     },
     element02: {
-        left : -360,
-        right : 360,
-        height : 500,
+        e01: {
+            left : -360,
+            right : 360,
+            height : 500,
+        },
+        e02: {
+            left : -360,
+            right : 360,
+            height : 550,
+        },
+        e03: {
+            left : -360,
+            right : 360,
+            height : 700,
+        }
+        
     },
     element03: {
-        left : -360,
-        right : 360,
-        height : 600,
+        e01: {
+            left : -360,
+            right : 360,
+            height : 600,
+        },
+        e02: {
+            left : -360,
+            right : 360,
+            height : 500,
+        },
+        e03: {
+            left : -360,
+            right : 360,
+            height : 900,
+        },
     },
 }

@@ -28,7 +28,9 @@ export class HighestScoreButton extends Component {
         this.anim = this.node.getComponent(Animation);
         this.anim.play("button_entrance_right");
         setTimeout(() => {
-            this.anim.play("button_idle");
+            if (this.anim) {
+                this.anim.play("button_idle");
+            }
         }, 1000);
     }
 

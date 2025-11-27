@@ -1,4 +1,4 @@
-import { _decorator, Component, instantiate, math, Node, Prefab, UITransform } from 'cc';
+import { _decorator, Component, instantiate, math, Node, Prefab, random, UITransform } from 'cc';
 import { gp } from './GlobalProperties';
 import { PlayerController } from './PlayerController';
 import { ElementData, G_VIEW_SIZE, GameStatus } from '../Constants';
@@ -7,14 +7,15 @@ const { ccclass, property } = _decorator;
 @ccclass('ElementController')
 export class ElementController extends Component {
     
-    @property(Prefab)
-    element01 : Prefab = null;
-    @property(Prefab)
-    element02 : Prefab = null;
-    @property(Prefab)
-    element03 : Prefab = null;
+    @property([Prefab])
+    elements01 : Prefab[] = [];
+    @property([Prefab])
+    elements02 : Prefab[] = [];
+    @property([Prefab])
+    elements03 : Prefab[] = [];
 
     lastHeight : number = G_VIEW_SIZE.height / 2;
+    currBoardNum : number = 0;
     
     player : PlayerController = null;
     @property([Node])
@@ -38,12 +39,15 @@ export class ElementController extends Component {
         if (lastOne.position.y - lastOne.getComponent(UITransform).contentSize.y / 2 - curPlayerY < G_VIEW_SIZE.height) {
             const randomNum = math.randomRange(0, 100);
             let newOb = null; 
-            if (randomNum < 5) {   //5%
-                newOb = this.createNewElement(2);
-            } else if (randomNum < 15) {   //10%
-                newOb = this.createNewElement(3);
-            } else {  // 85% 
-                newOb = this.createNewElement(1);
+            if (randomNum < this.currBoardNum) {   
+                if (this.player.isIgnore) {
+                    newOb = this.createNewBoard();
+                }
+                newOb = this.createNewIgnore();
+            } else if (randomNum < this.currBoardNum * 3) {   
+                newOb = this.createNewYuanbao();
+            } else { 
+                newOb = this.createNewBoard();
             }
             
             this.elements.push(newOb);
@@ -53,12 +57,12 @@ export class ElementController extends Component {
 
     initElements() {
         while (this.lastHeight < G_VIEW_SIZE.height * 2) {
-            const newOb = this.createNewElement(1);
+            const newOb = this.createNewBoard();
             this.elements.push(newOb);
         }
     }
 
-    createNewElement(idx : number) : Node {
+    createNewElement111(idx : number) : Node {
         let newOb : Node = null;
         let randomDistanceX = 0;
         let randomDistanceY = math.randomRange(300, 600);
@@ -95,6 +99,101 @@ export class ElementController extends Component {
                 break;
         }
 
+        return newOb;
+    }
+
+    createNewBoard() : Node {
+        const randomNum = math.randomRange(0, 100);
+        let newOb = this.elements01[0];
+        let elementData = ElementData.element01.e01;
+        if (randomNum < 20) {
+
+        } else if (randomNum < 40) {
+            if (this.lastHeight > 10000) {
+                newOb = this.elements01[1];
+                elementData = ElementData.element01.e02;
+            }
+        } else if (randomNum < 60) {
+            if (this.lastHeight > 20000) {
+                newOb = this.elements01[2];
+                elementData = ElementData.element01.e03;
+            }
+        } else if (randomNum < 70) {
+            if (this.lastHeight > 30000) {
+                newOb = this.elements01[3];
+                elementData = ElementData.element01.e04;
+            }
+        } else if (randomNum < 80) {
+            if (this.lastHeight > 40000) {
+                newOb = this.elements01[4];
+                elementData = ElementData.element01.e05;
+            }
+        } else {
+            if (this.lastHeight > 50000) {
+                newOb = this.elements01[5];
+                elementData = ElementData.element01.e06;
+            }
+        }
+        let randomDistanceX = math.randomRange(elementData.left, elementData.right);
+        let randomDistanceY = math.randomRange(300, 600);//randomDistanceY是上一个元素底部到新元素底部高度
+        this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
+        let newObPrefab = instantiate(newOb);
+        newObPrefab.setPosition(randomDistanceX, this.lastHeight + elementData.height / 2);
+        newObPrefab.setParent(this.node);
+        this.lastHeight += elementData.height;//此时lastHeight是新元素顶部高度
+
+        this.currBoardNum++;
+        return newObPrefab;
+    }
+
+    createNewIgnore() : Node {
+        const randomNum = math.randomRange(0, 100);
+        let newOb = instantiate(this.elements02[0]);
+        let elementData = ElementData.element02.e01;
+        if (randomNum < 30) {
+
+        } else if (randomNum < 70) {
+            newOb = instantiate(this.elements02[1]);
+            elementData = ElementData.element02.e02;
+        } else {
+            newOb = instantiate(this.elements02[2]);
+            elementData = ElementData.element02.e03;
+        }
+        
+        let randomDistanceX = math.randomRange(elementData.left, elementData.right);
+        let randomDistanceY = math.randomRange(300, 600);
+        this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
+        
+        newOb.setPosition(randomDistanceX, this.lastHeight + elementData.height / 2);
+        newOb.setParent(this.node);
+        this.lastHeight += elementData.height;//此时lastHeight是新元素顶部高度
+
+        this.currBoardNum = 0;
+        return newOb;
+    }
+
+    createNewYuanbao() : Node {
+        const randomNum = math.randomRange(0, 100);
+        let newOb = instantiate(this.elements03[0]);
+        let elementData = ElementData.element02.e01;
+        if (randomNum < 30) {
+
+        } else if (randomNum < 70) {
+            newOb = instantiate(this.elements03[1]);
+            elementData = ElementData.element03.e02;
+        } else {
+            newOb = instantiate(this.elements03[2]);
+            elementData = ElementData.element03.e03;
+        }
+
+        let randomDistanceX = math.randomRange(elementData.left, elementData.right);
+        let randomDistanceY = math.randomRange(200, 400);
+        this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
+        newOb.setPosition(randomDistanceX, this.lastHeight + elementData.height / 2);
+        newOb.setParent(this.node);
+        this.lastHeight += elementData.height;//此时lastHeight是新元素顶部高度
+
+        this.currBoardNum = 0;
         return newOb;
     }
 

@@ -46,6 +46,7 @@ export class PlayerController extends Component {
             this.rigidBody.type = ERigidBody2DType.Static;
             return;
         }
+
         this.rigidBody.type = ERigidBody2DType.Dynamic;
         if (this.rigidBody) {
             if (this.node.position.x > 310) {
@@ -77,7 +78,6 @@ export class PlayerController extends Component {
     }
 
     jump(dir : number) {
-        //console.log("jump")
         this.rigidBody.linearVelocity = new Vec2(this.rigidBody.linearVelocity.x + 5 * dir, 
             this.rigidBody.linearVelocity.y + 10);
         
@@ -139,6 +139,7 @@ export class PlayerController extends Component {
         .to(0.01, { scale: new Vec3(1, 1, 1) }) // 回到地面
         .start();
     }
+
 }
 
 

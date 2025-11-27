@@ -3,6 +3,7 @@ import { gp } from './GlobalProperties';
 import { PlayerController } from './PlayerController';
 import { GameStatus, LocalStorageItems } from '../Constants';
 import { AudioManager } from '../AudioManager';
+import { Tutorial } from './Tutorial';
 const { ccclass, property } = _decorator;
 
 @ccclass('game')
@@ -81,6 +82,9 @@ export class game extends Component {
     initUI() {
         const tapToStartUI = this.node.getChildByName('TapToStartUI');
         tapToStartUI.active = true;
+        const tutorialUI = this.node.getComponentInChildren(Tutorial);
+        tutorialUI.node.active = false;
+            
     }
 
 }

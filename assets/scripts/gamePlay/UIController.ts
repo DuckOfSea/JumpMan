@@ -1,7 +1,6 @@
 import { _decorator, Camera, Component, director, HeightField, Label, labelAssembler, Node, Slider } from 'cc';
 import { gp } from './GlobalProperties';
 import { GameStatus, LocalStorageItems } from '../Constants';
-import { TapToStart } from './TapToStart';
 import { AudioManager } from '../AudioManager';
 import { GameOverController } from './GameOverController';
 const { ccclass, property } = _decorator;
@@ -49,6 +48,7 @@ export class UIController extends Component {
         const yuanbaoLabel = this.yuanbaoUI.getChildByName('YuanbaoNum').getComponent(Label);
         const yuanbaoNum = Number(localStorage.getItem(LocalStorageItems.YUANBAO_NUM) ? 
             localStorage.getItem(LocalStorageItems.YUANBAO_NUM) : '0');
+        //const yuanbaoNum = 0;//todo
         console.log("yuanbao num =   " + yuanbaoNum);
         gp.yuanbaoNum = yuanbaoNum;
         yuanbaoLabel.string = yuanbaoNum.toString();
@@ -90,9 +90,8 @@ export class UIController extends Component {
 
     clickSettingOkButton() {
         this.settingUI.active = false;
-        const tapToStartUI = this.node.getParent().getComponentInChildren(TapToStart);
         const GameOverUI = this.node.getParent().getComponentInChildren(GameOverController);
-        if (tapToStartUI == null || tapToStartUI.node.active) {//在皮肤选择界面也是wait状态
+        if (this.heightUI.active == false) {//在皮肤选择界面也是wait状态
             gp.gameStatus = GameStatus.WAIT_TO_START;
         } else if (GameOverUI.node.active){
             gp.gameStatus = GameStatus.GAME_OVER;

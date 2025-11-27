@@ -10,6 +10,7 @@ export class GlobalProperties extends Component {
     public gameStatus : number = 0;
     public score : number = 0;
     public yuanbaoNum : number = 0;
+    public needGamePlayTutorial : string = 'yes';
 
     start() {
         
