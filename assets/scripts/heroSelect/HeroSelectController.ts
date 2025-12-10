@@ -14,7 +14,7 @@ export class HeroSelectController extends Component {
     currentSelectedIndex : number = 0;
     currentSelectedItem : Node = null;
     showUnlockItem : Node = null;
-    itemUnlockData : number[] = [1, 0, 0, 0, 0];
+    itemUnlockData : number[] = [1, 0, 0, 0, 0,   0, 0, 0, 0, 0];
     @property(AudioManager)
     audioManager : AudioManager = null;
     @property([Prefab])
@@ -34,9 +34,9 @@ export class HeroSelectController extends Component {
             this.itemUnlockData = JSON.parse(savedItemUnlockData);
         }
         
-        //todo测试用，正式发布改回来
-        this.itemUnlockData = [1, 0, 0, 0, 0, 
-                                0, 0, 0, 0, 0];
+        // test
+        // this.itemUnlockData = [1, 0, 0, 0, 0, 
+        //                         0, 0, 0, 0, 0];
         this.init();
     }
 
@@ -50,7 +50,7 @@ export class HeroSelectController extends Component {
 
     unlockRandomButton() {
         //如果钱不够
-        if (gp.yuanbaoNum < 100) {
+        if (gp.yuanbaoNum < 200) {
             const unlockRandomButton = this.node.getComponentInChildren(UnlockRandomButton);
             unlockRandomButton.playRefuseAnimation();
             this.audioManager.playSFX(3);

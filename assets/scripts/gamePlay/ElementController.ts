@@ -1,7 +1,7 @@
 import { _decorator, Component, instantiate, math, Node, Prefab, random, UITransform } from 'cc';
 import { gp } from './GlobalProperties';
 import { PlayerController } from './PlayerController';
-import { ElementData, G_VIEW_SIZE, GameStatus } from '../Constants';
+import { ElementData, G_VIEW_SIZE, GameStatus, LocalStorageItems } from '../Constants';
 const { ccclass, property } = _decorator;
 
 @ccclass('ElementController')
@@ -13,6 +13,8 @@ export class ElementController extends Component {
     elements02 : Prefab[] = [];
     @property([Prefab])
     elements03 : Prefab[] = [];
+    @property(Prefab)
+    element02_tutorial : Prefab = null;
 
     lastHeight : number = G_VIEW_SIZE.height / 2;
     currBoardNum : number = 0;
@@ -60,46 +62,14 @@ export class ElementController extends Component {
             const newOb = this.createNewBoard();
             this.elements.push(newOb);
         }
-    }
-
-    createNewElement111(idx : number) : Node {
-        let newOb : Node = null;
-        let randomDistanceX = 0;
-        let randomDistanceY = math.randomRange(300, 600);
-        switch (idx) {
-            case 1:
-                randomDistanceY = math.randomRange(300, 600);
-                this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
-                newOb = instantiate(this.element01);
-                randomDistanceX = math.randomRange(ElementData.element01.left, ElementData.element01.right);
-                newOb.setPosition(randomDistanceX, this.lastHeight + ElementData.element01.height / 2);
-                newOb.setParent(this.node);
-                this.lastHeight += ElementData.element01.height;//此时lastHeight是新元素顶部高度
-                break;
-            case 2:
-                randomDistanceY = math.randomRange(300, 600);
-                this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
-                newOb = instantiate(this.element02);
-                randomDistanceX = math.randomRange(ElementData.element02.left, ElementData.element02.right);
-                newOb.setPosition(randomDistanceX, this.lastHeight + ElementData.element02.height / 2);
-                newOb.setParent(this.node);
-                this.lastHeight += ElementData.element02.height;//此时lastHeight是新元素顶部高度
-                break;
-            case 3:
-                randomDistanceY = math.randomRange(300, 600);
-                this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
-                newOb = instantiate(this.element03);
-                randomDistanceX = math.randomRange(ElementData.element03.left, ElementData.element03.right);
-                newOb.setPosition(randomDistanceX, this.lastHeight + ElementData.element03.height / 2);
-                newOb.setParent(this.node);
-                this.lastHeight += ElementData.element03.height;//此时lastHeight是新元素顶部高度
-                break;
-            default :
-                console.warn("create new element idx is NAN-----")
-                break;
+        const needIgnoreTutorial = localStorage.getItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL) ? 
+                    localStorage.getItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL) : 'yes';
+        console.log("--------  needIgnoreTutorial = " + needIgnoreTutorial)
+        if (needIgnoreTutorial == 'yes') {
+            console.log("--------  needIgnoreTutorial")
+            const newOb = this.createNewTutorialIgnore();
+            this.elements.push(newOb);
         }
-
-        return newOb;
     }
 
     createNewBoard() : Node {
@@ -197,6 +167,21 @@ export class ElementController extends Component {
         return newOb;
     }
 
+
+    createNewTutorialIgnore() {
+        let newOb = instantiate(this.element02_tutorial);
+        let elementData = ElementData.element02.tutorial;
+        let randomDistanceX = math.randomRange(elementData.left, elementData.right);
+        let randomDistanceY = math.randomRange(300, 600);
+        this.lastHeight += randomDistanceY;//此时lastHeight是新元素底部高度
+        
+        newOb.setPosition(randomDistanceX, this.lastHeight + elementData.height / 2);
+        newOb.setParent(this.node);
+        this.lastHeight += elementData.height;//此时lastHeight是新元素顶部高度
+
+        this.currBoardNum = 0;
+        return newOb;
+    }
 }
 
 

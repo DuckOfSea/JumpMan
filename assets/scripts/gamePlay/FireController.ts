@@ -26,7 +26,7 @@ export class FireController extends Component {
         let playerY = this.player.node.position.y;
         let curY = this.node.position.y;
         //火焰的速度主要受两个因素
-        //1.火焰到主角的距离  speed1 = 0.000001x^{3}  火焰距离主角近时无影响，距离远时方便快速追上主角
+        //1.火焰到主角的距离  speed1 = 0.000001d^{3}  火焰距离主角近时无影响，距离远时方便快速追上主角
         //2.当前已经走过的距离  speed2 = 根号（100x）  根据已走过距离缓慢增加速度，后续速度增长速度较慢，因为speed2已经很快，每快一点压迫感都增加很多
         const distence = playerY - curY;
         const speed1 = 0.000001 * Math.pow(distence, 3);

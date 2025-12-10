@@ -4,6 +4,7 @@ import { gp } from './GlobalProperties';
 import { AudioManager} from '../AudioManager';
 import { GameStatus, GroupNum } from '../Constants';
 import { UIController } from './UIController';
+import { Tutorial } from './Tutorial';
 const { ccclass, property } = _decorator;
 
 @ccclass('PlayerController')
@@ -89,7 +90,6 @@ export class PlayerController extends Component {
                 this.onPlayerDie();
             }
         } else if (otherCollider.group == GroupNum.OBSTACLE) {
-            const worldManifold = contact.getWorldManifold()
             this.bounce()
         } else if (otherCollider.group == GroupNum.ITEM) {
             if (otherCollider.node.name.startsWith("item01-ignore")) {
@@ -103,6 +103,10 @@ export class PlayerController extends Component {
                 this.isIgnore = true;
                 this.ignoreTimer = 0;
                 this.audioManager.playBGM(3);
+                if (otherCollider.node.name == "item01-ignore-tutorial") {
+                    const tutorial = find('Canvas/Tutorial')!.getComponent(Tutorial);
+                    tutorial.startIgnoreTutorial();
+                }
             } else if (otherCollider.node.name.startsWith("item02-yuanbao")) {
                 setTimeout(() => {
                     otherCollider.node.active = false;

@@ -1,4 +1,4 @@
-import { _decorator, Component, Node, UITransform } from 'cc';
+import { _decorator, Component, Node, settings, UITransform } from 'cc';
 import { PlayerController } from './PlayerController';
 import { GameStatus } from '../Constants';
 import { gp } from './GlobalProperties';
@@ -8,12 +8,12 @@ const { ccclass, property } = _decorator;
 @ccclass('Tutorial')
 export class Tutorial extends Component {
     
-    @property(PlayerController)
-    player : PlayerController = null;
     @property(Node)
     gamePlay : Node = null;
     left : Node = null;
     right : Node = null;
+    @property(Node)
+    ignoreNode : Node = null;
     @property(Node)
     camera : Node = null;
     
@@ -22,12 +22,14 @@ export class Tutorial extends Component {
         this.gamePlay = this.node.getChildByName('GamePlay');
         this.left = this.gamePlay.getChildByName('Left');
         this.right = this.gamePlay.getChildByName('Right');
-        this.node.active = false;
+        this.ignoreNode = this.node.getChildByName('Ignore');
+        this.ignoreNode.active = false;
         this.gamePlay.active = false;
+        this.node.active = false;
     }
 
     protected start(): void {
-        this.player = this.node.getParent().getChildByName('Players').getComponentInChildren(PlayerController);
+        
     }
 
     protected onDestroy(): void {
@@ -35,15 +37,15 @@ export class Tutorial extends Component {
     }
 
     protected onEnable(): void {
-        this.gamePlay.on(Node.EventType.TOUCH_START, this.doNothing, this);
-        this.left.on(Node.EventType.TOUCH_START, this.gamePlayTutorial01, this);
-        this.right.on(Node.EventType.TOUCH_START, this.gamePlayTutorial02, this);
+        // this.gamePlay.on(Node.EventType.TOUCH_START, this.doNothing, this);
+        // this.left.on(Node.EventType.TOUCH_START, this.gamePlayTutorial01, this);
+        // this.right.on(Node.EventType.TOUCH_START, this.gamePlayTutorial02, this);
     }
 
     protected onDisable(): void {
-        this.gamePlay.off(Node.EventType.TOUCH_START, this.doNothing, this);
-        this.left.off(Node.EventType.TOUCH_START, this.gamePlayTutorial01, this);
-        this.right.off(Node.EventType.TOUCH_START, this.gamePlayTutorial02, this);  
+        // this.gamePlay.off(Node.EventType.TOUCH_START, this.doNothing, this);
+        // this.left.off(Node.EventType.TOUCH_START, this.gamePlayTutorial01, this);
+        // this.right.off(Node.EventType.TOUCH_START, this.gamePlayTutorial02, this);  
     }
 
     update(deltaTime: number) {
@@ -56,6 +58,8 @@ export class Tutorial extends Component {
         this.left.active = true;
         this.right.active = false;
         gp.gameStatus = GameStatus.TUTORIAL;
+        this.left.on(Node.EventType.TOUCH_START, this.gamePlayTutorial01, this);
+        this.right.on(Node.EventType.TOUCH_START, this.gamePlayTutorial02, this);
         this.node.setPosition(this.camera.position);
     }
 
@@ -65,12 +69,34 @@ export class Tutorial extends Component {
     }
 
     gamePlayTutorial02() {
+        this.gamePlay.active = false;
         this.node.active = false;
         gp.gameStatus = GameStatus.GAMING;
+        this.left.off(Node.EventType.TOUCH_START, this.gamePlayTutorial01, this);
+        this.right.off(Node.EventType.TOUCH_START, this.gamePlayTutorial02, this);  
     }
 
     doNothing() {
 
+    }
+
+    startIgnoreTutorial() {
+        this.node.active = true;
+        this.ignoreNode.active = true;
+        gp.gameStatus = GameStatus.TUTORIAL;
+        this.node.setPosition(this.camera.position);
+        this.ignoreNode.on(Node.EventType.TOUCH_START, this.doNothing, this);
+        setTimeout(() => {
+            this.ignoreNode.off(Node.EventType.TOUCH_START, this.doNothing, this);
+            this.ignoreNode.on(Node.EventType.TOUCH_START, this.endIgnoreTutorial, this);
+        }, 2000)
+    }
+
+    endIgnoreTutorial() {
+        this.ignoreNode.active = false;
+        this.node.active = false;
+        gp.gameStatus = GameStatus.GAMING;
+        this.ignoreNode.off(Node.EventType.TOUCH_START, this.endIgnoreTutorial, this);
     }
 }
 

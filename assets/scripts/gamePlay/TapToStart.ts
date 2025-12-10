@@ -21,6 +21,11 @@ export class TapToStart extends Component {
     start() {
         this.UINode = find('Canvas/UI-Node')!.getComponent(UIController);
         this.node.on(NodeEventType.TOUCH_START, this.touchStart, this, true);
+
+        //test
+        //localStorage.setItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL, 'yes')
+        gp.needGamePlayTutorial = localStorage.getItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL) ? 
+            localStorage.getItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL) : 'yes';
     }
 
     protected onDestroy(): void {
@@ -48,10 +53,6 @@ export class TapToStart extends Component {
         console.log("taptostart");
         this.UINode.showHeightUI();
         this.closeOtherButton();
-        //need to delete
-        localStorage.setItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL, 'yes')
-        gp.needGamePlayTutorial = localStorage.getItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL) ? 
-            localStorage.getItem(LocalStorageItems.NEED_GAME_PLAY_TUTORIAL) : 'yes';
             
         if (gp.needGamePlayTutorial == 'yes') {
             const tutorial = this.node.getParent().getComponentInChildren(Tutorial);

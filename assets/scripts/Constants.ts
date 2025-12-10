@@ -65,6 +65,11 @@ export const ElementData = {
         },
     },
     element02: {
+        tutorial : {
+            left : 0,
+            right : 0,
+            height : 400,
+        },
         e01: {
             left : -360,
             right : 360,

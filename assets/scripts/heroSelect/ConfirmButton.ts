@@ -16,11 +16,6 @@ export class ConfirmButton extends Component {
         gra.roundRect(-100, -50, 200, 100, 50)
         gra.fill()
     }
-
-    // test() {
-    //     const sprite = this.node.getComponentInChildren(Sprite);
-        
-    // }
 }
 
 

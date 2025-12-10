@@ -4,6 +4,7 @@ import { PlayerController } from './PlayerController';
 import { GameStatus, LocalStorageItems } from '../Constants';
 import { AudioManager } from '../AudioManager';
 import { Tutorial } from './Tutorial';
+import { GameOverController } from './GameOverController';
 const { ccclass, property } = _decorator;
 
 @ccclass('game')
@@ -84,7 +85,8 @@ export class game extends Component {
         tapToStartUI.active = true;
         const tutorialUI = this.node.getComponentInChildren(Tutorial);
         tutorialUI.node.active = false;
-            
+        const gameoverUI = this.node.getComponentInChildren(GameOverController);
+        gameoverUI.node.active = false;
     }
 
 }

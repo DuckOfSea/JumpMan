@@ -41,6 +41,8 @@ export class UIController extends Component {
                 this.musicSlider = sliders[index];
             } else if (sliders[index].node.name == 'SoundEffectSlider') {
                 this.soundEffectSlider = sliders[index];
+                console.log("onEffectVolumeChangeEnd");
+                this.soundEffectSlider.node.on(Node.EventType.TOUCH_START, this.onEffectVolumeChangeEnd, this);
             }
         }
         this.yuanbaoUI = this.node.getChildByName('YuanbaoUI');
@@ -48,7 +50,7 @@ export class UIController extends Component {
         const yuanbaoLabel = this.yuanbaoUI.getChildByName('YuanbaoNum').getComponent(Label);
         const yuanbaoNum = Number(localStorage.getItem(LocalStorageItems.YUANBAO_NUM) ? 
             localStorage.getItem(LocalStorageItems.YUANBAO_NUM) : '0');
-        //const yuanbaoNum = 0;//todo
+        //const yuanbaoNum = 0;//test
         console.log("yuanbao num =   " + yuanbaoNum);
         gp.yuanbaoNum = yuanbaoNum;
         yuanbaoLabel.string = yuanbaoNum.toString();
@@ -79,8 +81,8 @@ export class UIController extends Component {
         gp.gameStatus = GameStatus.SETTING_PAUSE;
         console.log("setting button")
 
-        let musicVolume = this.audioManager.musicVolume;
-        let effectVolume = this.audioManager.effectVolume;
+        let musicVolume = this.audioManager.musicVolume > 1 ?  1 : this.audioManager.musicVolume;
+        let effectVolume = this.audioManager.effectVolume > 1 ? 1 : this.audioManager.effectVolume;
         this.musicSlider.progress = musicVolume;
         this.soundEffectSlider.progress = effectVolume;
 
@@ -112,6 +114,10 @@ export class UIController extends Component {
 
     onEffectVolumeChange(slider : Slider) {
         this.audioManager.updateEffectVolume(slider.progress);
+    }
+
+    onEffectVolumeChangeEnd(slider : Slider) {
+        this.audioManager.playSFX(2);
     }
 
     changeYuanbaoNum(num : number) {

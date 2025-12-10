@@ -19,11 +19,6 @@ export class UnlockRandomButton extends Component {
         gra.fill()
     }
 
-    // test() {
-    //     const sprite = this.node.getComponentInChildren(Sprite);
-        
-    // }
-
     playRefuseAnimation() {
         tween(this.node)
             .to(0.1, {position : new Vec3(this.node.x + 10, this.node.y, 0)})
